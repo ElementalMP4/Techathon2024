@@ -1,0 +1,5 @@
+{
+    "devicePath": "/dev/serial/by-id/usb-MBED_MBED_CMSIS-DAP_9900023431904e450075100a0000003200000000cc5b28bd-if01",
+    "baudRate": 115200,
+    "websocket": "ws://localhost:3000/gateway"
+}
