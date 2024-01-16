@@ -1,0 +1,14 @@
+[Unit]
+Description=Techathon2024 Websocket and HTTP Server
+After=network.target
+[Service]
+Type=simple
+ExecStart=/root/.nvm/versions/node/v20.11.0/bin/node /home/elementalmp4/Techathon2024/server/server.js
+ExecStop=/bin/kill -15 $MAINPID
+SuccessExitStatus=143
+Restart=always
+RestartSec=120
+CPUAccounting=yes
+MemoryAccounting=yes
+[Install]
+WantedBy=default.target
