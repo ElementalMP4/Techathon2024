@@ -1,0 +1,1 @@
+rsync -av -e ssh --exclude='node_modules' --exclude='.git' . elementalmp4@wyse:/home/elementalmp4/Techathon2024
