@@ -21,8 +21,6 @@ wss.on('connection', (ws) => {
     const id = uuidv4();
     console.log(`New connection ${id}`);
 
-    ws.send("Hello Client");
-
     connections.set(id, ws);
     ws.on('message', (data) => {
         console.log(`${id}: ${data}`);
