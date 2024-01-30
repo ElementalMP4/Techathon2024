@@ -12,6 +12,7 @@ function createWebSocket() {
 
     ws.on('open', () => {
         console.log('Connected to WebSocket server');
+        ws.send(JSON.stringify({ "type": "identify", "data": { nodeType: "command" } }));
     });
 
     ws.on('message', (data) => {

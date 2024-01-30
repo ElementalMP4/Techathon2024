@@ -12,7 +12,7 @@
     <script>
         const socket = new WebSocket(`ws://${location.host}/gateway`);
         socket.onopen = function () {
-            socket.send('Hello Server');
+            socket.send({ "type": "identify", "data": { "nodeType": "client" } });
         }
 
         socket.onmessage = function (event) {
