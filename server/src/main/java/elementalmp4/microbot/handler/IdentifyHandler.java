@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.logging.Logger;
 
-import static main.java.elementalmp4.microbot.entity.MessageBuilder.*;
+import static main.java.elementalmp4.microbot.entity.MessageBuilder.error;
+import static main.java.elementalmp4.microbot.entity.MessageBuilder.success;
 
 @Handler
 public class IdentifyHandler extends AbstractHandler {
