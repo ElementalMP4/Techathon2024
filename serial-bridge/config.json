@@ -1,9 +1,10 @@
 {
     "devices": [
-        "/dev/serial/by-id/usb-MBED_MBED_CMSIS-DAP_9900023432044e45004980190000005e00000000cfcf28bd-if01"
+        "/dev/serial/by-id/usb-MBED_MBED_CMSIS-DAP_9900023432044e45004980190000005e00000000cfcf28bd-if01",
+        "/dev/serial/by-id/usb-MBED_MBED_CMSIS-DAP_9900023431904e450075100a0000003200000000cc5b28bd-if01"
     ],
     "layout": {
-        "width": 1,
+        "width": 2,
         "height": 1
     },
     "baudRate": 115200,

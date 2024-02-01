@@ -85,8 +85,11 @@ function sendDataToSerial(port, data) {
     }
 }
 
-createWebSocket();
-
-for (path of config.devices) {
-    createSerialPort(path)
+if (config.devices.length != config.layout.height * config.layout.width) {
+    console.log("Height and width parameters in config do not equal number of serial devices");
+} else {
+    createWebSocket();
+    for (path of config.devices) {
+        createSerialPort(path)
+    }
 }
