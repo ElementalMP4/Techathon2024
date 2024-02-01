@@ -4,27 +4,29 @@ const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
 let ws;
-let serialPort;
-let serialParser;
+let serialPorts = new Map();
 
 function createWebSocket() {
     ws = new WebSocket(config.websocket);
 
     ws.on('open', () => {
         console.log('Connected to WebSocket server');
-        ws.send(JSON.stringify({ "type": "identify", "data": { nodeType: "command" } }));
+        ws.send(JSON.stringify({ "type": "identify", "data": { nodeType: "command", width: config.layout.width, height: config.layout.height } }));
     });
 
     ws.on('message', (data) => {
         console.log(`Received message from WebSocket: ${data}`);
         const payload = JSON.parse(data);
         if (payload.type == "game-update") {
+
+            if (payload.data.width != config.layout.width || payload.data.height != config.layout.height) {
+                console.error("Received non-matching width or height parameters. Ignoring");
+                return;
+            }
             let fieldSize = payload.data.width * payload.data.height;
             for (microbit = 0; microbit < fieldSize; microbit++) {
                 let frame = payload.data.frames[microbit];
-                for (row = 0; row < 5; row++) {
-                    console.log(`dsp ${microbit} ${row} ${frame[row].join("")}`);
-                }
+                sendDataToSerial(config.devices[microbit], `${frame.map(row => row.join('')).join(',')}\n`);
             }
         }
     });
@@ -34,26 +36,31 @@ function createWebSocket() {
     });
 
     ws.on('close', (code, reason) => {
+        console.log(`WebSocket connection closed - Reconnecting in 3 seconds`);
         setTimeout(createWebSocket, 3000);
     });
 }
 
-function createSerialPort() {
-    serialPort = new SerialPort({ path: config.devicePath, baudRate: config.baudRate });
-    serialParser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+function createSerialPort(path) {
+    let serialPort = new SerialPort({ path: path, baudRate: config.baudRate });
+    let serialParser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
     serialPort.on('open', () => {
-        console.log('Serial port is open');
+        console.log('Serial port is open on ' + path);
     });
 
     serialParser.on('data', (data) => {
-        console.log(`Received data from Serial port: ${data}`);
+        console.log(`Received data from serial: ${data}`);
         sendMessage(data);
     });
 
     serialPort.on('error', (err) => {
-        setTimeout(createSerialPort, 3000);
+        console.error(`Serial port error: ${err.message}`);
+        setTimeout(() => createSerialPort(path), 3000);
     });
+
+    if (serialPorts.has(path)) serialPorts.delete(path);
+    serialPorts.set(path, serialPort);
 }
 
 function sendMessage(message) {
@@ -65,11 +72,12 @@ function sendMessage(message) {
     }
 }
 
-function sendDataToSerial(data) {
+function sendDataToSerial(port, data) {
+    let serialPort = serialPorts.get(port);
     if (serialPort && serialPort.isOpen) {
         serialPort.write(data, (err) => {
             if (err) {
-                console.error('Error writing to serial port:', err.message);
+                console.error(`Error writing to ${port}`, err.message);
             }
         });
     } else {
@@ -78,4 +86,7 @@ function sendDataToSerial(data) {
 }
 
 createWebSocket();
-createSerialPort();
+
+for (path of config.devices) {
+    createSerialPort(path)
+}

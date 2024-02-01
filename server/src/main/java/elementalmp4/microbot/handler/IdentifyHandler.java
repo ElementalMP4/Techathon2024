@@ -1,6 +1,7 @@
 package main.java.elementalmp4.microbot.handler;
 
 import main.java.elementalmp4.microbot.entity.Session;
+import main.java.elementalmp4.microbot.service.GameService;
 import main.java.elementalmp4.microbot.service.SessionService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class IdentifyHandler extends AbstractHandler {
     @Autowired
     private SessionService sessionService;
 
+    @Autowired
+    private GameService gameService;
+
     private static final Logger LOGGER = Logger.getLogger(IdentifyHandler.class.getName());
 
     @Override
@@ -27,6 +31,7 @@ public class IdentifyHandler extends AbstractHandler {
             }
             LOGGER.info("Identified command node as " + session.getSessionId());
             session.setSessionType("command");
+            gameService.setLayout(data.getInt("width"), data.getInt("height"));
         }
 
         session.send(success(this.name(), "Identified"));

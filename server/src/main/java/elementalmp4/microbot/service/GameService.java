@@ -12,15 +12,24 @@ public class GameService {
 
     private Timer gameTimer;
 
+    private int width;
+    private int height;
+
     @Autowired
     private SessionService sessionService;
 
-    public void startGame(GameOfLife game) {
+    public void startGame(int[][] initialGrid) {
+        GameOfLife game = new GameOfLife(width, height, initialGrid);
         gameTimer = new Timer("game-timer");
-        gameTimer.scheduleAtFixedRate(new GameTask(game, sessionService), 500, 500);
+        gameTimer.scheduleAtFixedRate(new GameTask(game, sessionService), 1200, 1200);
     }
 
     public void stopGame() {
         gameTimer.cancel();
+    }
+
+    public void setLayout(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 }
