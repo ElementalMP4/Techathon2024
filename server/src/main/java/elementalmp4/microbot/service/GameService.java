@@ -20,4 +20,7 @@ public class GameService {
         gameTimer.scheduleAtFixedRate(new GameTask(game, sessionService), 500, 500);
     }
 
+    public void stopGame() {
+        gameTimer.cancel();
+    }
 }

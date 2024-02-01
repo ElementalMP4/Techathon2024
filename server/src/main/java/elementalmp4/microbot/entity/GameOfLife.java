@@ -1,6 +1,5 @@
 package main.java.elementalmp4.microbot.entity;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
