@@ -38,12 +38,11 @@ public class GameOfLife {
     }
 
     public JSONObject getFormattedBoard() {
-        int[][][] result = new int[chunkWidth + chunkHeight][5][5];
-
+        int[][][] result = new int[chunkWidth * chunkHeight][5][5];
         for (int i = 0; i < chunkWidth; i++) {
             for (int j = 0; j < chunkHeight; j++) {
-                int startX = i * chunkWidth;
-                int startY = j * chunkHeight;
+                int startX = i * 5;
+                int startY = j * 5;
 
                 for (int x = 0; x < 5; x++) {
                     for (int y = 0; y < 5; y++) {
@@ -52,9 +51,8 @@ public class GameOfLife {
                 }
             }
         }
-
         // Create and return the JSONObject
-        return new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", new JSONArray(result));
+        return new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
     }
 
 
