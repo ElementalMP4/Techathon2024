@@ -1,5 +1,6 @@
 package main.java.elementalmp4.microbot.entity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -37,23 +38,25 @@ public class GameOfLife {
     }
 
     public JSONObject getFormattedBoard() {
-        int[][] result = new int[chunkHeight * 5][chunkWidth * 5];
+        int[][][] result = new int[chunkWidth + chunkHeight][5][5];
 
-        for (int i = 0; i < chunkHeight; i++) {
-            for (int j = 0; j < chunkWidth; j++) {
-                int startRow = i * 5;
-                int endRow = startRow + 5;
-                int startCol = j * 5;
-                int endCol = startCol + 5;
+        for (int i = 0; i < chunkWidth; i++) {
+            for (int j = 0; j < chunkHeight; j++) {
+                int startX = i * chunkWidth;
+                int startY = j * chunkHeight;
 
-                for (int row = startRow; row < endRow; row++) {
-                    result[row] = Arrays.copyOfRange(board[row], startCol, endCol);
+                for (int x = 0; x < 5; x++) {
+                    for (int y = 0; y < 5; y++) {
+                        result[i + j][x][y] = board[startX + x][startY + y];
+                    }
                 }
             }
         }
 
-        return new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
+        // Create and return the JSONObject
+        return new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", new JSONArray(result));
     }
+
 
     public JSONObject progress() {
         int[][] newBoard = copyBoard();

@@ -25,7 +25,6 @@ function createWebSocket() {
     });
 
     ws.on('close', (code, reason) => {
-        console.log(`WebSocket connection closed - Reconnecting in 3 seconds`);
         setTimeout(createWebSocket, 3000);
     });
 }
@@ -44,7 +43,6 @@ function createSerialPort() {
     });
 
     serialPort.on('error', (err) => {
-        console.error(`Serial port error: ${err.message}`);
         setTimeout(createSerialPort, 3000);
     });
 }

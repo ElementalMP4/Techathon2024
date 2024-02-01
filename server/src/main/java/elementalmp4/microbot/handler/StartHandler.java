@@ -14,7 +14,7 @@ public class StartHandler extends AbstractHandler {
 
     @Override
     public void execute(Session session, JSONObject data) {
-        gameService.startGame(new GameOfLife(2, 2, null));
+        gameService.startGame(new GameOfLife(1, 1, null));
     }
 
     @Override
