@@ -17,7 +17,16 @@ function createWebSocket() {
 
     ws.on('message', (data) => {
         console.log(`Received message from WebSocket: ${data}`);
-        sendDataToSerial(data);
+        const payload = JSON.parse(data);
+        if (payload.type == "game-update") {
+            let fieldSize = payload.data.width * payload.data.height;
+            for (microbit = 0; microbit < fieldSize; microbit++) {
+                let frame = payload.data.frames[microbit];
+                for (row = 0; row < 5; row++) {
+                    console.log(`dsp ${microbit} ${row} ${frame[row].join("")}`);
+                }
+            }
+        }
     });
 
     ws.on('error', (error) => {

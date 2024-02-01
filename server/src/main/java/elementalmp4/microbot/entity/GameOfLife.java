@@ -50,8 +50,8 @@ public class GameOfLife {
                 }
             }
         }
-        // Create and return the JSONObject
-        return new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
+        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
+        return new JSONObject().put("type", "game-update").put("data", gameBoard);
     }
 
 
