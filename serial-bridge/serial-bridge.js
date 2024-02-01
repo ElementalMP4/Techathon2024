@@ -49,7 +49,7 @@ function createSerialPort() {
 
 function sendMessage(message) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(message);
+        ws.send(JSON.stringify({ type: "microbit", data: { msg: message } }));
         console.log(`Sent message to WebSocket: ${message}`);
     } else {
         console.warn('WebSocket not open. Message not sent.');
