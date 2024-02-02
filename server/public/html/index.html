@@ -1,25 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SebIntoTech</title>
-</head>
+<html>
+<title>Game Of Life</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/w3.css">
 
 <body>
-    <h1>SebIntoTech</h1>
-    <script>
-        const socket = new WebSocket(`ws://${location.host}/gateway`);
-        socket.onopen = function () {
-            socket.send({ "type": "identify", "data": { "nodeType": "client" } });
-        }
+    <div class="w3-container w3-orange">
+        <h1 class="w3-text-white">Micro:Net Game Of Life</h1>
+    </div>
 
-        socket.onmessage = function (event) {
-            const data = event.data;
-            console.log(data);
-        };
-    </script>
+    <div class="w3-container w3-panel">
+        <div class="w3-card-4">
+            <header class="w3-container w3-red">
+                <h3>Game Controls</h3>
+            </header>
+            <div class="w3-container">
+                <div class="w3-panel">
+                    <button class="w3-button w3-light-gray" onclick="start()">Start</button>
+                    <button class="w3-button w3-light-gray" onclick="stop()">Stop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container w3-panel">
+        <div class="w3-card-4">
+            <header class="w3-container w3-red">
+                <h3>System Information</h3>
+            </header>
+            <div class="w3-container">
+                <div class="w3-panel">
+
+                    <table class="w3-table w3-striped w3-bordered">
+                        <tr>
+                            <th>Option</th>
+                            <th>Status</th>
+                        </tr>
+                        <tr>
+                            <td>Micro:bits</td>
+                            <td id="mbit-count">2</td>
+                        </tr>
+                        <tr>
+                            <td>Display width</td>
+                            <td id="display-width">2</td>
+                        </tr>
+                        <tr>
+                            <td>Display height</td>
+                            <td id="display-height">1</td>
+                        </tr>
+                        <tr>
+                            <td>Game running?</td>
+                            <td id="game-running">false</td>
+                        </tr>
+                    </table>
+                    <div class="w3-panel w3-center">
+                        <button class="w3-button w3-light-gray" onclick="refresh()">Refresh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-modal" class="w3-modal">
+        <div class="w3-modal-content">
+            <header class="w3-container w3-orange">
+                <h3 class="w3-text-white" id="message-modal-title">
+                </h3>
+            </header>
+            <div class="w3-container">
+                <span onclick="document.getElementById('message-modal').style.display='none'"
+                    class="w3-button w3-display-topright w3-orange w3-text-white">&times;</span>
+                <div class="w3-panel">
+                    <p id="message-modal-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+
+<script src="/js/index.js"></script>
 
 </html>

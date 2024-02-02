@@ -3,8 +3,6 @@ package main.java.elementalmp4.microbot.entity;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GameOfLife {
     private final int chunkWidth;
