@@ -3,6 +3,8 @@ package main.java.elementalmp4.microbot.entity;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameOfLife {
     private final int chunkWidth;
@@ -38,18 +40,19 @@ public class GameOfLife {
 
     public JSONObject getFormattedBoard() {
         int[][][] result = new int[chunkWidth * chunkHeight][5][5];
-        for (int i = 0; i < chunkWidth; i++) {
-            for (int j = 0; j < chunkHeight; j++) {
+        for (int j = 0; j < chunkHeight; j++) {
+            for (int i = 0; i < chunkWidth; i++) {
                 int startX = i * 5;
                 int startY = j * 5;
 
                 for (int x = 0; x < 5; x++) {
                     for (int y = 0; y < 5; y++) {
-                        result[i + j][x][y] = board[startX + x][startY + y];
+                        result[j * chunkWidth + i][y][x] = board[startY + y][startX + x];
                     }
                 }
             }
         }
+
         JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
         return new JSONObject().put("type", "game-update").put("data", gameBoard);
     }

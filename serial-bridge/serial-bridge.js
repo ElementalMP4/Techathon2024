@@ -36,7 +36,7 @@ function createWebSocket() {
     });
 
     ws.on('close', (code, reason) => {
-        console.log(`WebSocket connection closed - Reconnecting in 3 seconds`);
+        if (config.logConnectionFaults) console.log(`WebSocket connection closed - Reconnecting in 3 seconds`);
         setTimeout(createWebSocket, 3000);
     });
 }
@@ -55,7 +55,7 @@ function createSerialPort(path) {
     });
 
     serialPort.on('error', (err) => {
-        console.error(`Serial port error: ${err.message}`);
+        if (config.logConnectionFaults) console.error(`Serial port error: ${err.message}`);
         setTimeout(() => createSerialPort(path), 3000);
     });
 
@@ -81,7 +81,7 @@ function sendDataToSerial(port, data) {
             }
         });
     } else {
-        console.warn('Serial port not open. Data not sent.');
+        if (config.logConnectionFaults) console.warn('Serial port not open. Data not sent.');
     }
 }
 

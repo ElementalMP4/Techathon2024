@@ -8,5 +8,6 @@
         "height": 1
     },
     "baudRate": 115200,
-    "websocket": "ws://localhost:3000/gateway"
+    "websocket": "ws://localhost:3000/gateway",
+    "logConnectionFaults": false
 }
