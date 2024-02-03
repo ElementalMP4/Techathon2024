@@ -1,0 +1,11 @@
+td.on {
+    background-color: #8bc34a;
+}
+
+td.off {
+    background-color: #f44336;
+}
+
+td.simulator-cell {
+    height: 50px;
+}

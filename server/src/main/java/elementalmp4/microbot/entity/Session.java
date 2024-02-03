@@ -32,6 +32,10 @@ public class Session {
         return this.sessionType.equals("command");
     }
 
+    public boolean isClientNode() {
+        return this.sessionType.equals("client");
+    }
+
     public String getSessionId() {
         return this.socket.getId();
     }

@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import static main.java.elementalmp4.microbot.entity.MessageBuilder.success;
+
 public class GameOfLife {
     private final int chunkWidth;
     private final int chunkHeight;
@@ -52,11 +54,15 @@ public class GameOfLife {
         }
 
         JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
-        return new JSONObject().put("type", "game-update").put("data", gameBoard);
+        return success("game-update", gameBoard);
     }
 
+    public JSONObject getBoard() {
+        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("board", board);
+        return success("game-update", gameBoard);
+    }
 
-    public JSONObject progress() {
+    public void progress() {
         int[][] newBoard = copyBoard();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -73,7 +79,6 @@ public class GameOfLife {
             }
         }
         board = newBoard;
-        return getFormattedBoard();
     }
 
     private int countNeighbors(int row, int col) {

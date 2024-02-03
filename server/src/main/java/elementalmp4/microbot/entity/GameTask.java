@@ -17,7 +17,9 @@ public class GameTask extends TimerTask {
     @Override
     public void run() {
         if (sessionService.getCommandNodeSession().isPresent()) {
-            sessionService.getCommandNodeSession().get().send(game.progress());
+            sessionService.getCommandNodeSession().get().send(game.getFormattedBoard());
+            sessionService.broadcastToClients(game.getBoard());
+            game.progress();
         }
     }
 }

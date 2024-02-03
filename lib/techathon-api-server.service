@@ -3,7 +3,7 @@ Description=Techathon2024 Websocket and HTTP Server
 After=network.target
 [Service]
 Type=simple
-ExecStart=/usr/bin/java -jar /home/elementalmp4/Techathon2024/server/server.jar
+ExecStart=/bin/bash /home/elementalmp4/Techathon2024/server/run.sh
 ExecStop=/bin/kill -15 $MAINPID
 SuccessExitStatus=143
 Restart=always
