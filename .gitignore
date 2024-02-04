@@ -3,3 +3,4 @@ package-lock.json
 .idea
 target
 .DS_Store
+dependency-reduced-pom.xml
