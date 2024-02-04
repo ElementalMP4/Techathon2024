@@ -16,12 +16,24 @@
     <div class="w3-container w3-panel">
         <div class="w3-card-4">
             <header class="w3-container w3-orange">
-                <h3 class="w3-text-white">Game Controls</h3>
+                <div class="grid-container">
+                    <div align="left">
+                        <p>
+                        <h3 class="w3-text-white">Control Panel</h3>
+                        </p>
+                    </div>
+                    <div align="right">
+                        <p><button class="w3-button w3-red" onclick="toggleMenu('game-controls')"
+                                id="game-controls-toggle">&#x25B2;</button></p>
+                    </div>
+                </div>
             </header>
-            <div class="w3-container">
+            <div class="w3-container" id="game-controls">
                 <div class="w3-panel">
                     <button class="w3-button w3-green" onclick="start()">Start</button>
                     <button class="w3-button w3-red" onclick="stop()">Stop</button>
+                    <button class="w3-button w3-blue" onclick="restart()">Restart</button>
+                    <button class="w3-button w3-grey" onclick="toggleSystemMessages()">Toggle System Messages</button>
                 </div>
             </div>
         </div>
@@ -30,11 +42,22 @@
     <div class="w3-container w3-panel">
         <div class="w3-card-4">
             <header class="w3-container w3-orange">
-                <h3 class="w3-text-white">Game Simulator</h3>
+                <div class="grid-container">
+                    <div align="left">
+                        <p>
+                        <h3 class="w3-text-white">Simulator</h3>
+                        </p>
+                    </div>
+                    <div align="right">
+                        <p><button class="w3-button w3-red" onclick="toggleMenu('game-simulator')"
+                                id="game-simulator-toggle">&#x25B2;</button></p>
+                    </div>
+                </div>
             </header>
-            <div class="w3-container">
+            <div class="w3-container" id="game-simulator">
                 <div class="w3-panel">
-                    <table id="simulator" class="w3-table"></table>
+                    <table id="simulator" class="w3-table">
+                    </table>
                 </div>
             </div>
         </div>
@@ -43,12 +66,25 @@
     <div class="w3-container w3-panel">
         <div class="w3-card-4">
             <header class="w3-container w3-orange">
-                <h3 class="w3-text-white">Board Designer</h3>
+                <div class="grid-container">
+                    <div align="left">
+                        <p>
+                        <h3 class="w3-text-white">Board Designer</h3>
+                        </p>
+                    </div>
+                    <div align="right">
+                        <p><button class="w3-button w3-red" onclick="toggleMenu('board-designer')"
+                                id="board-designer-toggle">&#x25B2;</button></p>
+                    </div>
+                </div>
             </header>
-            <div class="w3-container">
+            <div class="w3-container" id="board-designer">
                 <div class="w3-panel">
                     <table id="designer" class="w3-table" border="1"></table>
                 </div>
+                <div class="w3-panel w3-center">
+                    <button class="w3-button w3-light-gray" onclick="clearBoardDesigner()">Clear</button>
+                </div>
             </div>
         </div>
     </div>
@@ -56,9 +92,19 @@
     <div class="w3-container w3-panel">
         <div class="w3-card-4">
             <header class="w3-container w3-orange">
-                <h3 class="w3-text-white">System Information</h3>
+                <div class="grid-container">
+                    <div align="left">
+                        <p>
+                        <h3 class="w3-text-white">System Information</h3>
+                        </p>
+                    </div>
+                    <div align="right">
+                        <p><button class="w3-button w3-red" onclick="toggleMenu('system-information')"
+                                id="system-information-toggle">&#x25B2;</button></p>
+                    </div>
+                </div>
             </header>
-            <div class="w3-container">
+            <div class="w3-container" id="system-information">
                 <div class="w3-panel">
 
                     <table class="w3-table w3-striped w3-bordered">
@@ -81,6 +127,10 @@
                         <tr>
                             <td>Game running?</td>
                             <td id="game-running"></td>
+                        </tr>
+                        <tr>
+                            <td>Current Iteration</td>
+                            <td id="current-iteration"></td>
                         </tr>
                     </table>
                     <div class="w3-panel w3-center">

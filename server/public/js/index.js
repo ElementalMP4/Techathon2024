@@ -8,11 +8,47 @@ const microbitCount = document.getElementById("mbit-count");
 const displayWidth = document.getElementById("display-width");
 const displayHeight = document.getElementById("display-height");
 const gameRunning = document.getElementById("game-running");
+const currentIteration = document.getElementById("current-iteration");
 
 const simulator = document.getElementById("simulator");
 const designer = document.getElementById("designer");
 
+const upChevron = "&#x25B2;";
+const downChevron = "&#x25BC;";
+
+const systemMessageToggle = "tgl-sys-msg";
+
 var layout = null;
+
+function toggleMenu(menu) {
+    let menuDiv = document.getElementById(menu);
+    let toggle = document.getElementById(menu + "-toggle");
+
+    if (menuDiv.style.display == "none") {
+        menuDiv.style.display = "block";
+        toggle.innerHTML = upChevron;
+    } else {
+        menuDiv.style.display = "none";
+        toggle.innerHTML = downChevron;
+    }
+
+}
+
+function toggleSystemMessages() {
+    if (localStorage.hasOwnProperty(systemMessageToggle)) {
+        if (localStorage.getItem(systemMessageToggle) == "on") {
+            localStorage.setItem(systemMessageToggle, "off");
+        } else {
+            localStorage.setItem(systemMessageToggle, "on");
+        }
+    } else {
+        localStorage.setItem(systemMessageToggle, "off");
+    }
+}
+
+function sysMsgEnabled() {
+    return localStorage.hasOwnProperty(systemMessageToggle) ? localStorage.getItem(systemMessageToggle) == "on" : true;
+}
 
 function send(data) {
     if (socket.readyState == WebSocket.OPEN) socket.send(JSON.stringify(data));
@@ -34,15 +70,20 @@ function getDesignedBoard() {
     return result;
 }
 
+function clearBoardDesigner() {
+    for (var i = 0, row; row = designer.rows[i]; i++) {
+        for (var j = 0, cell; cell = row.cells[j]; j++) {
+            cell.classList.remove("on");
+            cell.classList.add("off");
+        }
+    }
+}
+
 function start() {
     let board = getDesignedBoard();
     let data = {};
-    let onCount = 0;
-
-    for (row of board) {
-        onCount += row.reduce((a, b) => a + b, 0);
-    }
-
+    let onCount = board.map(row => row.reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0);
+    console.log(onCount);
     if (onCount > 0) data = { board: board };
     send({ type: "start", data: data });
     refresh();
@@ -51,6 +92,11 @@ function start() {
 function stop() {
     send({ type: "stop", data: {} });
     refresh();
+}
+
+function restart() {
+    send({ type: "stop", data: {} });
+    start();
 }
 
 function showMessage(title, message) {
@@ -74,6 +120,7 @@ function updateStatus(data) {
     set(displayWidth, data.displayWidth);
     set(displayHeight, data.displayHeight);
     set(gameRunning, data.gameRunning);
+    set(currentIteration, data.currentIteration);
 }
 
 function updateSimulator(data) {
@@ -86,6 +133,7 @@ function updateSimulator(data) {
         table += "</tr>\n";
     }
     simulator.innerHTML = table;
+    currentIteration.innerHTML = data.currentIteration;
 }
 
 function createBoardDesigner(data) {
@@ -131,10 +179,10 @@ socket.onmessage = function (event) {
 
     switch (msg.type) {
         case "start":
-            showMessage("Success", msg.data.message);
+            if (sysMsgEnabled()) showMessage("Success", msg.data.message);
             break;
         case "stop":
-            showMessage("Success", msg.data.message);
+            if (sysMsgEnabled()) showMessage("Success", msg.data.message);
             break;
         case "status":
             updateStatus(msg.data);

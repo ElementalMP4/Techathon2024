@@ -13,6 +13,7 @@ import java.util.Timer;
 public class GameService {
 
     private Optional<Timer> gameTimer = Optional.empty();
+    private GameOfLife game;
 
     private int width = 0;
     private int height = 0;
@@ -23,10 +24,14 @@ public class GameService {
     public Optional<String> startGame(int[][] initialGrid) {
         if (width == 0 || height == 0) return Optional.of("Display parameters not received from command node, game will not start");
         if (gameTimer.isPresent()) return Optional.of("A game is already in progress");
-        GameOfLife game = new GameOfLife(width, height, initialGrid);
+        game = new GameOfLife(width, height, initialGrid);
         gameTimer = Optional.of(new Timer("game-timer"));
         gameTimer.get().scheduleAtFixedRate(new GameTask(game, sessionService), 500, 500);
         return Optional.empty();
+    }
+
+    public int getCurrentIteration() {
+        return gameTimer.isPresent() ? game.getIteration() : 0;
     }
 
     public boolean stopGame() {
@@ -49,6 +54,7 @@ public class GameService {
                 .put("microbitCount", width * height)
                 .put("displayWidth", width)
                 .put("displayHeight", height)
+                .put("currentIteration", getCurrentIteration())
                 .put("gameRunning", gameTimer.isPresent());
     }
 }

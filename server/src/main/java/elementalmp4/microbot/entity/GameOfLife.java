@@ -12,6 +12,7 @@ public class GameOfLife {
     private final int width;
     private final int height;
     private int[][] board;
+    private int iteration = 0;
 
     public GameOfLife(int width, int height, int[][] initialGrid) {
         this.chunkWidth = width;
@@ -53,12 +54,12 @@ public class GameOfLife {
             }
         }
 
-        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result);
+        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("frames", result).put("currentIteration", iteration);
         return success("game-update", gameBoard);
     }
 
     public JSONObject getBoard() {
-        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("board", board);
+        JSONObject gameBoard = new JSONObject().put("width", chunkWidth).put("height", chunkHeight).put("board", board).put("currentIteration", iteration);
         return success("game-update", gameBoard);
     }
 
@@ -78,7 +79,12 @@ public class GameOfLife {
                 }
             }
         }
+        iteration++;
         board = newBoard;
+    }
+
+    public int getIteration() {
+        return this.iteration;
     }
 
     private int countNeighbors(int row, int col) {
