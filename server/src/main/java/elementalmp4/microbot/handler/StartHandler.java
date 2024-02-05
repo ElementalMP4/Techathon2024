@@ -20,8 +20,17 @@ public class StartHandler extends AbstractHandler {
     @Override
     public void execute(Session session, JSONObject data) {
         int[][] initialGrid = null;
+        int period = 500;
+
         if (data.has("board")) initialGrid = jsonArrayToJavaArray(data.getJSONArray("board"));
-        Optional<String> startError = gameService.startGame(initialGrid);
+        if (data.has("period")) period = data.getInt("period");
+
+        if (period < 100 || period > 3000) {
+            session.send(error(name(), "Period must be between 100ms and 3000ms"));
+            return;
+        }
+
+        Optional<String> startError = gameService.startGame(initialGrid, period);
         if (startError.isEmpty()) session.send(success(name(), "Started new game"));
         else session.send(error(name(), startError.get()));
     }

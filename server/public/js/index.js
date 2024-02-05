@@ -12,6 +12,7 @@ const currentIteration = document.getElementById("current-iteration");
 
 const simulator = document.getElementById("simulator");
 const designer = document.getElementById("designer");
+const periodInput = document.getElementById("period-input");
 
 const upChevron = "&#x25B2;";
 const downChevron = "&#x25BC;";
@@ -81,10 +82,11 @@ function clearBoardDesigner() {
 
 function start() {
     let board = getDesignedBoard();
-    let data = {};
+    let period = periodInput.value;
+    let data = { period: period };
     let onCount = board.map(row => row.reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0);
     console.log(onCount);
-    if (onCount > 0) data = { board: board };
+    if (onCount > 0) data = { ...data, board: board };
     send({ type: "start", data: data });
     refresh();
 }
@@ -103,6 +105,14 @@ function showMessage(title, message) {
     messageModalTitle.textContent = title;
     messageModalContent.textContent = message;
     messageModal.style.display = "block";
+}
+
+function showDisplayMode() {
+    send({ type: "display-layout", data: { display: "on" } });
+}
+
+function hideDisplayMode() {
+    send({ type: "display-layout", data: { display: "off" } });
 }
 
 function hideMessage() {

@@ -21,12 +21,12 @@ public class GameService {
     @Autowired
     private SessionService sessionService;
 
-    public Optional<String> startGame(int[][] initialGrid) {
+    public Optional<String> startGame(int[][] initialGrid, int period) {
         if (width == 0 || height == 0) return Optional.of("Display parameters not received from command node, game will not start");
         if (gameTimer.isPresent()) return Optional.of("A game is already in progress");
         game = new GameOfLife(width, height, initialGrid);
         gameTimer = Optional.of(new Timer("game-timer"));
-        gameTimer.get().scheduleAtFixedRate(new GameTask(game, sessionService), 500, 500);
+        gameTimer.get().scheduleAtFixedRate(new GameTask(game, sessionService), period, period);
         return Optional.empty();
     }
 

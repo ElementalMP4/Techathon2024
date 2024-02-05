@@ -1,23 +1,36 @@
-/**
- * format:
- * 
- * 00000,00000,00000,00000
- */
-serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-    input2 = serial.readString()
-    rows = input2.split(",")
-    for (let y = 0; y <= 4; y++) {
-        currentRow = rows[y].split("")
-        for (let x = 0; x <= 4; x++) {
-            if (currentRow[x] == "1") {
-                led.plot(x, y)
-            } else {
-                led.unplot(x, y)
+let row = ""
+let completeLayout: string[] = []
+let payload: string[] = []
+let input = ""
+serial.redirectToUSB()
+serial.setTxBufferSize(128)
+serial.setRxBufferSize(128)
+let showingLayout = false
+basic.forever(function () {
+    input = serial.readLine()
+    payload = input.split(" ")
+    if (payload[0] == "dsp") {
+        if (!(showingLayout)) {
+            completeLayout = payload[1].split(",")
+            for (let y = 0; y <= 4; y++) {
+                row = completeLayout[y]
+                for (let x = 0; x <= 4; x++) {
+                    if (row[x] == "1") {
+                        led.plot(x, y)
+                    } else {
+                        led.unplot(x, y)
+                    }
+                }
             }
         }
     }
+    if (payload[0] == "lyt") {
+        if (payload[1] == "on") {
+            showingLayout = true
+            basic.showNumber(parseFloat(payload[2]) + 1)
+        } else {
+            showingLayout = false
+            basic.clearScreen()
+        }
+    }
 })
-let currentRow: string[] = []
-let rows: string[] = []
-let input2 = ""
-serial.redirectToUSB()

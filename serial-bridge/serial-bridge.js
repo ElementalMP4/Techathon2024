@@ -6,6 +6,25 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 let ws;
 let serialPorts = new Map();
 
+function handleGameUpdate(data) {
+    if (data.width != config.layout.width || data.height != config.layout.height) {
+        console.error("Received non-matching width or height parameters. Ignoring");
+        return;
+    }
+    let fieldSize = data.width * data.height;
+    for (microbit = 0; microbit < fieldSize; microbit++) {
+        let frame = data.frames[microbit];
+        sendDataToSerial(config.devices[microbit], `dsp ${frame.map(row => row.join('')).join(",")}\n`);
+    }
+}
+
+function showDisplayLayout(data) {
+    for (microbit = 0; microbit < config.devices.length; microbit++) {
+        if (data.display == "on") sendDataToSerial(config.devices[microbit], `lyt on ${microbit}\n`);
+        else sendDataToSerial(config.devices[microbit], `lyt off\n`);
+    }
+}
+
 function createWebSocket() {
     ws = new WebSocket(config.websocket);
 
@@ -17,18 +36,15 @@ function createWebSocket() {
     ws.on('message', (data) => {
         console.log(`Received message from WebSocket: ${data}`);
         const payload = JSON.parse(data);
-        if (payload.type == "game-update") {
-
-            if (payload.data.width != config.layout.width || payload.data.height != config.layout.height) {
-                console.error("Received non-matching width or height parameters. Ignoring");
-                return;
-            }
-            let fieldSize = payload.data.width * payload.data.height;
-            for (microbit = 0; microbit < fieldSize; microbit++) {
-                let frame = payload.data.frames[microbit];
-                sendDataToSerial(config.devices[microbit], `${frame.map(row => row.join('')).join(',')}\n`);
-            }
+        switch (payload.type) {
+            case "game-update":
+                handleGameUpdate(payload.data);
+                break;
+            case "display-layout":
+                showDisplayLayout(payload.data);
+                break;
         }
+
     });
 
     ws.on('error', (error) => {
@@ -75,6 +91,7 @@ function sendMessage(message) {
 function sendDataToSerial(port, data) {
     let serialPort = serialPorts.get(port);
     if (serialPort && serialPort.isOpen) {
+        console.log(data);
         serialPort.write(data, (err) => {
             if (err) {
                 console.error(`Error writing to ${port}`, err.message);
