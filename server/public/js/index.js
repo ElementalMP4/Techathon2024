@@ -4,6 +4,8 @@ const messageModal = document.getElementById("message-modal");
 const messageModalTitle = document.getElementById("message-modal-title");
 const messageModalContent = document.getElementById("message-modal-content");
 
+const loader = document.getElementById("loader");
+
 const microbitCount = document.getElementById("mbit-count");
 const displayWidth = document.getElementById("display-width");
 const displayHeight = document.getElementById("display-height");
@@ -20,6 +22,12 @@ const downChevron = "&#x25BC;";
 const systemMessageToggle = "tgl-sys-msg";
 
 var layout = null;
+var isReady = false;
+
+function ready() {
+    isReady = true;
+    loader.style.display = "none";
+}
 
 function toggleMenu(menu) {
     let menuDiv = document.getElementById(menu);
@@ -85,15 +93,12 @@ function start() {
     let period = periodInput.value;
     let data = { period: period };
     let onCount = board.map(row => row.reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0);
-    console.log(onCount);
     if (onCount > 0) data = { ...data, board: board };
     send({ type: "start", data: data });
-    refresh();
 }
 
 function stop() {
     send({ type: "stop", data: {} });
-    refresh();
 }
 
 function restart() {
@@ -161,6 +166,7 @@ function createBoardDesigner(data) {
         table += "</tr>\n";
     }
     designer.innerHTML = table;
+    ready();
 }
 
 function toggle(cell) {
@@ -175,19 +181,21 @@ function toggle(cell) {
 
 socket.onopen = function () {
     send({ type: "identify", data: { nodeType: "client" } });
-    refresh();
 }
 
 socket.onmessage = function (event) {
     const msg = JSON.parse(event.data);
     console.log(msg);
 
-    if (!msg.success) {
+    if (!msg.success && isReady) {
         showMessage("Error", msg.data.error);
         return;
     }
 
     switch (msg.type) {
+        case "identify":
+            refresh();
+            break;
         case "start":
             if (sysMsgEnabled()) showMessage("Success", msg.data.message);
             break;
@@ -195,6 +203,9 @@ socket.onmessage = function (event) {
             if (sysMsgEnabled()) showMessage("Success", msg.data.message);
             break;
         case "status":
+            if (!msg.success && !isReady) {
+                setInterval(() => refresh(), 1000);
+            }
             updateStatus(msg.data);
             createBoardDesigner(msg.data);
             break;

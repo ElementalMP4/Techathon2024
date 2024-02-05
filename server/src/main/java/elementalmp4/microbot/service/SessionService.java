@@ -32,6 +32,10 @@ public class SessionService {
                 .findFirst();
     }
 
+    public boolean commandNodeConnected() {
+        return getCommandNodeSession().isPresent();
+    }
+
     public void broadcastToClients(JSONObject board) {
         List<Session> clients = sessions.values().stream().filter(Session::isClientNode).toList();
         for (Session session : clients) {
