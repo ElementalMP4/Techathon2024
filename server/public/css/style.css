@@ -1,3 +1,7 @@
+h1, h3, p, button, label, td, th {
+    font-family: 'Press Start 2P', system-ui;
+}
+
 table {
     table-layout: fixed;
 }
