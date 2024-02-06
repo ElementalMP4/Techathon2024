@@ -4,7 +4,7 @@ const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
 let ws;
-let serialPorts = new Map();
+let serialPort;
 
 function handleGameUpdate(data) {
     if (data.width != config.layout.width || data.height != config.layout.height) {
@@ -14,7 +14,7 @@ function handleGameUpdate(data) {
     let fieldSize = data.width * data.height;
     for (microbit = 0; microbit < fieldSize; microbit++) {
         let frame = data.frames[microbit];
-        sendDataToSerial(config.devices[microbit], `dsp ${frame.map(row => row.join('')).join(",")}\n`);
+        sendDataToSerial(`dsp ${microbit} ${frame.map(row => row.join('')).join(",")}\n`);
     }
 }
 
@@ -57,12 +57,12 @@ function createWebSocket() {
     });
 }
 
-function createSerialPort(path) {
-    let serialPort = new SerialPort({ path: path, baudRate: config.baudRate });
-    let serialParser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+function createSerialPort() {
+    serialPort = new SerialPort({ path: config.serialPort, baudRate: config.baudRate });
+    let serialParser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
     serialPort.on('open', () => {
-        console.log('Serial port is open on ' + path);
+        console.log('Serial port is open');
     });
 
     serialParser.on('data', (data) => {
@@ -74,9 +74,6 @@ function createSerialPort(path) {
         if (config.logConnectionFaults) console.error(`Serial port error: ${err.message}`);
         setTimeout(() => createSerialPort(path), 3000);
     });
-
-    if (serialPorts.has(path)) serialPorts.delete(path);
-    serialPorts.set(path, serialPort);
 }
 
 function sendMessage(message) {
@@ -88,8 +85,7 @@ function sendMessage(message) {
     }
 }
 
-function sendDataToSerial(port, data) {
-    let serialPort = serialPorts.get(port);
+function sendDataToSerial(data) {
     if (serialPort && serialPort.isOpen) {
         console.log(data);
         serialPort.write(data, (err) => {
@@ -102,11 +98,5 @@ function sendDataToSerial(port, data) {
     }
 }
 
-if (config.devices.length != config.layout.height * config.layout.width) {
-    console.log("Height and width parameters in config do not equal number of serial devices");
-} else {
-    createWebSocket();
-    for (path of config.devices) {
-        createSerialPort(path)
-    }
-}
+createWebSocket();
+createSerialPort()
