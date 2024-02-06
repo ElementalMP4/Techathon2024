@@ -3,6 +3,8 @@ const WebSocket = require('ws');
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
+const noSerial = config.noSerial || false;
+
 let ws;
 let serialPorts = new Map();
 
@@ -102,11 +104,15 @@ function sendDataToSerial(port, data) {
     }
 }
 
-if (config.devices.length != config.layout.height * config.layout.width) {
-    console.log("Height and width parameters in config do not equal number of serial devices");
-} else {
+if (noSerial) {
     createWebSocket();
-    for (path of config.devices) {
-        createSerialPort(path)
+} else {
+    if (config.devices.length != config.layout.height * config.layout.width) {
+        console.log("Height and width parameters in config do not equal number of serial devices");
+    } else {
+        createWebSocket();
+        for (path of config.devices) {
+            createSerialPort(path)
+        }
     }
 }

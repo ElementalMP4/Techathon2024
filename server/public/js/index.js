@@ -151,10 +151,22 @@ function updateSimulator(data) {
     currentIteration.innerHTML = data.currentIteration;
 }
 
-function createBoardDesigner(data) {
-    if (layout != null) {
-        return;
+function createSimulator(data) {
+    let newLayout = { width: data.displayWidth, height: data.displayHeight };
+    layout = newLayout;
+    let table = "";
+    for (let row = 0; row < layout.height * 5; row++) {
+        table += "<tr>\n";
+        for (let cell = 0; cell < layout.width * 5; cell++) {
+            table += `<td class="simulator-cell off"><h3></h3></td>\n`
+        }
+        table += "</tr>\n";
     }
+    designer.innerHTML = table;
+    simulator.innerHTML = table;
+}
+
+function createBoardDesigner(data) {
     let newLayout = { width: data.displayWidth, height: data.displayHeight };
     layout = newLayout;
     let table = "";
@@ -207,7 +219,10 @@ socket.onmessage = function (event) {
                 setInterval(() => refresh(), 1000);
             }
             updateStatus(msg.data);
-            createBoardDesigner(msg.data);
+            if (layout == null) {
+                createBoardDesigner(msg.data);
+                createSimulator(msg.data);
+            }
             break;
         case "game-update":
             updateSimulator(msg.data);

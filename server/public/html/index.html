@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="/css/w3.css">
     <link rel="stylesheet" href="/css/style.css">
     <link href="/img/favicon.png" rel="icon" type="image/png">
-    <link href="/font/PressStart2P-Regular.woff" rel="stylesheet">
 </head>
 
 <body>
-    <div class="w3-container w3-orange">
-        <h1 class="w3-text-white">Micro:Net Game Of Life</h1>
+    <div class="w3-container w3-red">
+        <div class="grid-container">
+            <h1 class="w3-text-white"><img src="/img/space-invader.svg" class="logo">Micro:Net Game Of Life </h1>
+        </div>
     </div>
 
     <div class="w3-container w3-panel">
@@ -26,11 +27,11 @@
                     </div>
                     <div align="right">
                         <p><button class="w3-button w3-red" onclick="toggleMenu('game-controls')"
-                                id="game-controls-toggle">&#x25B2;</button></p>
+                                id="game-controls-toggle">&#x25BC;</button></p>
                     </div>
                 </div>
             </header>
-            <div class="w3-container" id="game-controls">
+            <div class="w3-container" id="game-controls" style="display: none;">
                 <div class="w3-panel">
                     <div class="w3-panel">
                         <button class="w3-button w3-green" onclick="start()">Start</button>
@@ -42,7 +43,8 @@
                         <input id="period-input" type="range" min="100" max="3000" value="500">
                     </div>
                     <div class="w3-panel">
-                        <button class="w3-button w3-grey" onclick="toggleSystemMessages()">Toggle System Messages</button>
+                        <button class="w3-button w3-grey" onclick="toggleSystemMessages()">Toggle System
+                            Messages</button>
                         <button class="w3-button w3-green" onclick="showDisplayMode()">Enable Layout Display</button>
                         <button class="w3-button w3-red" onclick="hideDisplayMode()">Disable Layout Display</button>
                     </div>
@@ -62,11 +64,11 @@
                     </div>
                     <div align="right">
                         <p><button class="w3-button w3-red" onclick="toggleMenu('game-simulator')"
-                                id="game-simulator-toggle">&#x25B2;</button></p>
+                                id="game-simulator-toggle">&#x25BC;</button></p>
                     </div>
                 </div>
             </header>
-            <div class="w3-container" id="game-simulator">
+            <div class="w3-container" id="game-simulator" style="display: none;">
                 <div class="w3-panel">
                     <table id="simulator" class="w3-table">
                     </table>
@@ -86,11 +88,11 @@
                     </div>
                     <div align="right">
                         <p><button class="w3-button w3-red" onclick="toggleMenu('board-designer')"
-                                id="board-designer-toggle">&#x25B2;</button></p>
+                                id="board-designer-toggle">&#x25BC;</button></p>
                     </div>
                 </div>
             </header>
-            <div class="w3-container" id="board-designer">
+            <div class="w3-container" id="board-designer" style="display: none;">
                 <div class="w3-panel">
                     <table id="designer" class="w3-table" border="1"></table>
                 </div>
@@ -112,11 +114,11 @@
                     </div>
                     <div align="right">
                         <p><button class="w3-button w3-red" onclick="toggleMenu('system-information')"
-                                id="system-information-toggle">&#x25B2;</button></p>
+                                id="system-information-toggle">&#x25BC;</button></p>
                     </div>
                 </div>
             </header>
-            <div class="w3-container" id="system-information">
+            <div class="w3-container" id="system-information" style="display: none;">
                 <div class="w3-panel">
 
                     <table class="w3-table w3-striped w3-bordered">
