@@ -17,7 +17,7 @@ This being said, a LAN and initial internet connection are required to gather th
 
 - TP-Link TL-WA801ND wireless access point and router
 - TP-Link 5 port Gigabit Ethernet Switch
-- Dell Wyse N03D 3290 Thin Client
+- Raspberry Pi 5
 - At least one Micro:Bit (V1 or V2)
 
 ### Software
