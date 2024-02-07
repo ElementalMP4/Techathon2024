@@ -7,8 +7,9 @@
         "width": 2,
         "height": 1
     },
-    "noSerial": false,
+    "noSerial": true,
     "baudRate": 115200,
-    "websocket": "ws://localhost/gateway",
-    "logConnectionFaults": false
+    "websocket": "ws://localhost:3000/gateway",
+    "logConnectionFaults": false,
+    "logMessageContents": false
 }

@@ -162,7 +162,6 @@ function createSimulator(data) {
         }
         table += "</tr>\n";
     }
-    designer.innerHTML = table;
     simulator.innerHTML = table;
 }
 

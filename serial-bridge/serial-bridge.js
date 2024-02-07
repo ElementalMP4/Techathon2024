@@ -36,7 +36,7 @@ function createWebSocket() {
     });
 
     ws.on('message', (data) => {
-        console.log(`Received message from WebSocket: ${data}`);
+        if (config.logMessageContents) console.log(`Received message from WebSocket: ${data}`);
         const payload = JSON.parse(data);
         switch (payload.type) {
             case "game-update":
@@ -93,7 +93,6 @@ function sendMessage(message) {
 function sendDataToSerial(port, data) {
     let serialPort = serialPorts.get(port);
     if (serialPort && serialPort.isOpen) {
-        console.log(data);
         serialPort.write(data, (err) => {
             if (err) {
                 console.error(`Error writing to ${port}`, err.message);
