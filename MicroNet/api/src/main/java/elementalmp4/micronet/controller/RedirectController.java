@@ -11,9 +11,4 @@ public class RedirectController {
     public RedirectView redirectToIndex(RedirectAttributes attributes) {
         return new RedirectView("/html/index.html");
     }
-
-    @GetMapping("/simulator")
-    public RedirectView redirectToSimulator(RedirectAttributes attributes) {
-        return new RedirectView("/html/simulator.html");
-    }
 }

@@ -28,19 +28,20 @@ public class SessionService {
     public void broadcastToClients(String sessionGroup, JSONObject msg) {
         List<Session> clients = sessions.values()
                 .stream()
-                .filter(s -> "client".equals(s.getSessionType()))
-                .filter(s -> sessionGroup.equals(s.getSessionGroup()))
+                .filter(s -> s.getSessionType().isPresent())
+                .filter(s -> "client".equals(s.getSessionType().get()))
+                .filter(s -> sessionGroup.equals(s.getSessionGroup().get()))
                 .toList();
         for (Session session : clients) {
             session.send(msg);
         }
     }
 
-    public void broadcastToBridges(String sessionGroup, JSONObject msg) {
+    public void broadcastToBridges(JSONObject msg) {
         List<Session> clients = sessions.values()
                 .stream()
-                .filter(s -> "bridge".equals(s.getSessionType()))
-                .filter(s -> sessionGroup.equals(s.getSessionGroup()))
+                .filter(s -> s.getSessionType().isPresent())
+                .filter(s -> "bridge".equals(s.getSessionType().get()))
                 .toList();
         for (Session session : clients) {
             session.send(msg);

@@ -16,7 +16,6 @@ public class IdentifyHandler extends AbstractHandler {
     @Override
     public void execute(Session session, JSONObject data) {
         String type = data.getString("nodeType");
-        String sessionGroup = data.getString("group");
 
         if (!VALID_TYPES.contains(type)) {
             session.send(error(name(), "Invalid session type"));
@@ -24,9 +23,14 @@ public class IdentifyHandler extends AbstractHandler {
         }
 
         session.setSessionType(type);
-        session.setSessionGroup(sessionGroup);
 
-        session.send(success(name(), "Identified as " + type + " in group " + sessionGroup));
+        if (type.equals("client")) {
+            String sessionGroup = data.getString("group");
+            session.setSessionGroup(sessionGroup);
+            session.send(success(name(), "Identified as " + type + " in group " + sessionGroup));
+        } else {
+            session.send(success(name(), "Identified as " + type));
+        }
     }
 
     @Override

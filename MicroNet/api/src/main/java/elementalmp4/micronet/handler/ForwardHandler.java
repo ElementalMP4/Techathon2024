@@ -16,19 +16,15 @@ public class ForwardHandler extends AbstractHandler {
 
     @Override
     public void execute(Session session, JSONObject data) {
-        if (session.getSessionGroup().isEmpty()) {
-            session.send(error(name(), "Session group not set"));
-            return;
-        }
         if (session.getSessionType().isEmpty()) {
             session.send(error(name(), "Session type not set"));
             return;
         }
 
         if (session.getSessionType().get().equals("bridge")) {
-            sessionService.broadcastToClients(session.getSessionGroup().get(), success(name(), data));
+            sessionService.broadcastToClients(data.getString("group"), success(name(), data));
         } else if (session.getSessionType().get().equals("client")) {
-            sessionService.broadcastToBridges(session.getSessionGroup().get(), success(name(), data));
+            sessionService.broadcastToBridges(success(name(), data));
         }
     }
 
