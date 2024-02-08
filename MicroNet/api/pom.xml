@@ -9,9 +9,9 @@
 		<relativePath />
 	</parent>
 	<groupId>elementalmp4</groupId>
-	<artifactId>MicroBot</artifactId>
+	<artifactId>MicroNet</artifactId>
 	<version>0.0.1</version>
-	<name>MicroBot</name>
+	<name>MicroNet</name>
 	<properties>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 	</properties>

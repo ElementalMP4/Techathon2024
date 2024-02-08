@@ -1,0 +1,14 @@
+{
+    "devices": [
+        {
+            "port": "/dev/serial/by-id/usb-Arm_BBC_micro:bit_CMSIS-DAP_9906360200052820297b7c94e726b2fb000000006e052820-if01",
+            "channel": "10"
+        },
+        {
+            "port": "/dev/serial/by-id/usb-Arm_BBC_micro:bit_CMSIS-DAP_9906360200052820acc674e2f4692ab7000000006e052820-if01",
+            "channel": "20"
+        }
+    ],
+    "baudRate": 115200,
+    "websocket": "ws://localhost/gateway"
+}

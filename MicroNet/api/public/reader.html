@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <script src="http://micronet.local/micronet.js"></script>
+</head>
+
+<body>
+
+    <h1>Micro:Net Demo</h1>
+    <h3 id="channel-number"></h3>
+    <p id="message-log"></p>
+
+</body>
+
+<script>
+    let channelNumber = window.prompt("Enter your channel number");
+
+    let messageLog = document.getElementById("message-log");
+    let channelNumberMessage = document.getElementById("channel-number");
+
+    function messageHandler(message) {
+        messageLog.innerHTML += message + "<br />";
+    }
+
+    channelNumberMessage.innerHTML = "Channel number: " + channelNumber;
+    connectToMicroNet(channelNumber, messageHandler);
+</script>
+
+</html>

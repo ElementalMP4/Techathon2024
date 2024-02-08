@@ -9,6 +9,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class RedirectController {
     @GetMapping("/")
     public RedirectView redirectToIndex(RedirectAttributes attributes) {
-        return new RedirectView("/html/index.html");
+        return new RedirectView("/reader.html");
     }
 }
