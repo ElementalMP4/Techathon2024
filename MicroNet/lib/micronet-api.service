@@ -1,0 +1,14 @@
+[Unit]
+Description=MicroNet API and static file server
+After=network.target
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/elementalmp4/MicroNet/api/run.sh
+ExecStop=/bin/kill -15 $MAINPID
+SuccessExitStatus=143
+Restart=always
+RestartSec=120
+CPUAccounting=yes
+MemoryAccounting=yes
+[Install]
+WantedBy=default.target

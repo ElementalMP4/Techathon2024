@@ -1,0 +1,15 @@
+{
+    "devices": [
+        {
+            "port": "/dev/serial/by-id/usb-MBED_MBED_CMSIS-DAP_9900023432044e45004980190000005e00000000cfcf28bd-if01",
+            "channel": 10
+        },
+        {
+            "port": "/dev/serial/by-id/usb-ARM_BBC_micro:bit_CMSIS-DAP_9900000031634e45001c0010000000190000000097969901-if01",
+            "channel": 11
+        }
+    ],
+    "websocket": "ws://localhost/gateway",
+    "logConnectionFaults": false,
+    "logMessageContents": false
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=MicroNet serial-to-websocket bridge
+After=network.target
+[Service]
+Type=simple
+ExecStart=/root/.nvm/versions/node/v20.11.0/bin/node /home/elementalmp4/MicroNet/serial/serial-bridge.js
+ExecStop=/bin/kill -15 $MAINPID
+SuccessExitStatus=143
+Restart=always
+RestartSec=120
+CPUAccounting=yes
+MemoryAccounting=yes
+[Install]
+WantedBy=default.target

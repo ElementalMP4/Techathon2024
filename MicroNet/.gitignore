@@ -1,0 +1,6 @@
+node_modules
+package-lock.json
+.idea
+target
+.DS_Store
+dependency-reduced-pom.xml
