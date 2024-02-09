@@ -4,7 +4,7 @@ An API to bridge micro:bit radio to websockets
 
 ## Architecture 
 
-![Architecture Diagram](http://url/to/img.png)
+![Architecture Diagram](https://raw.githubusercontent.com/ElementalMP4/Techathon2024/main/MicroNet/Cloud%20Architecture.png)
 
 Things to note:
 - API server supports multiple bridge nodes across multiple devices
