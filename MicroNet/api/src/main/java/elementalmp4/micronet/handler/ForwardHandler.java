@@ -25,7 +25,7 @@ public class ForwardHandler extends AbstractHandler {
             sessionService.broadcastToClients(data.getString("group"), success(name(), data));
         } else if (session.getSessionType().get().equals("client")) {
             data.put("group", session.getSessionGroup().get());
-            sessionService.broadcastToBridges(success(name(), data));
+            sessionService.broadcastToBridge(session, success(name(), data));
         }
     }
 

@@ -27,10 +27,10 @@ function sendToMicroNet(message) {
 
 function connectWebSocket() {
     socket = new WebSocket(socketURL);
-    log(LogLevel.INFO, "Connecting to WebSocket...");
+    log(LogLevel.INFO, "Connecting...");
 
     socket.onopen = function () {
-        log(LogLevel.OK, 'Connected to WebSocket');
+        log(LogLevel.OK, 'Connected!');
         socket.send(JSON.stringify({ type: "identify", data: { nodeType: "client", group: groupId } }));
     };
 
@@ -40,6 +40,7 @@ function connectWebSocket() {
         console.log(msg);
         if (!msg.success) {
             log(LogLevel.ERROR, msg.data.error);
+            window.alert(msg.data.error);
             return;
         }
 
@@ -54,12 +55,12 @@ function connectWebSocket() {
     };
 
     socket.onclose = function () {
-        log(LogLevel.ERROR, 'Disconnected from WebSocket');
+        log(LogLevel.ERROR, 'Disconnected');
         setTimeout(connectWebSocket, 3000);
     };
 
     socket.onerror = function (error) {
-        log(LogLevel.ERROR, 'WebSocket error');
+        log(LogLevel.ERROR, 'Connection error');
     };
 }
 
