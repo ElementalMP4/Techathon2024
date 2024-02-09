@@ -1,0 +1,1 @@
+sudo systemctl restart micronet-api micronet-bridge

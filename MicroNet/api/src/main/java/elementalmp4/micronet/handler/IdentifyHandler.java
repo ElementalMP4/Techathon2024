@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static main.java.elementalmp4.micronet.entity.MessageBuilder.error;
 import static main.java.elementalmp4.micronet.entity.MessageBuilder.success;
@@ -20,6 +21,7 @@ public class IdentifyHandler extends AbstractHandler {
     private BridgeService bridgeService;
 
     private static final Set<String> VALID_TYPES = Set.of("client", "bridge");
+    private static final Logger LOGGER = Logger.getLogger(IdentifyHandler.class.getName());
 
     @Override
     public void execute(Session session, JSONObject data) {
@@ -31,6 +33,7 @@ public class IdentifyHandler extends AbstractHandler {
         }
 
         session.setSessionType(type);
+        LOGGER.info("Identified " + session.getSessionId() + " as " + type);
 
         if (type.equals("client")) {
             String sessionGroup = data.getString("group");

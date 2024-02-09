@@ -10,8 +10,12 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
+import java.util.logging.Logger;
+
 @Component
 public class WebsocketEventHandler extends AbstractWebSocketHandler {
+
+    private static final Logger LOGGER = Logger.getLogger(WebsocketEventHandler.class.getName());
 
     @Autowired
     private MessageHandlerService messageHandlerService;
@@ -27,11 +31,13 @@ public class WebsocketEventHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
+        LOGGER.info("New connection " + session.getId() + " from " + session.getRemoteAddress());
         sessionService.putSession(session.getId(), new Session(session));
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        LOGGER.info("Closed connection " + session.getId());
         sessionService.removeSession(session.getId());
     }
 
