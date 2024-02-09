@@ -5,12 +5,14 @@
 </head>
 
 <style>
+     /* Set the font for all the text */
     h1,
     h3,
     p {
         font-family: 'Courier New', Courier, monospace
     }
 
+     /* Make Micro:Net messages white */
     p {
         color: white;
         font-size: 30px;
@@ -18,16 +20,19 @@
         padding: 0px;
     }
 
+     /* Set the background colour */
     body {
         background-color: #111111;
     }
 
+    /* Format the header */
     .header {
         background-color: #5555aa;
         padding: 10px;
         border-radius: 5px;
     }
 
+    /* Format the Micro:Net messages */
     .log-message {
         margin-top: 20px;
         border: 3px solid #55aa55;
@@ -35,6 +40,7 @@
         padding: 10px;
     }
 
+    /* Animate messages when we show them */
     @keyframes pop-in {
         0% {
             transform: scale(0.5);
@@ -59,16 +65,20 @@
         <h3 id="channel-number"></h3>
     </div>
 
+    <!--Messages from Micro:Net get added to this element-->
     <div id="message-log"></div>
 
 </body>
 
 <script>
+    //Show a message box which gets your channel number - you might want to change this!
     let channelNumber = window.prompt("Enter your channel number");
 
+    //Store the message log in a variable
     let messageLog = document.getElementById("message-log");
     let channelNumberMessage = document.getElementById("channel-number");
 
+    //Take the message we received from Micro:Net and put it inside an HTML div
     function wrapMessageInDiv(message) {
         return `
         <div class="log-message pop">
@@ -77,11 +87,17 @@
         `
     }
 
+    //This is the function that receives messages from Micro:Net
     function messageHandler(message) {
-        messageLog.insertAdjacentHTML("afterbegin", wrapMessageInDiv(message));
+        //Wrap the message
+        let wrappedMessage = wrapMessageInDiv(message);
+        //Add the new message to the message log at the top
+        messageLog.insertAdjacentHTML("afterbegin", wrappedMessage);
     }
 
+    //Set the channel number message
     channelNumberMessage.innerHTML = "Channel number: " + channelNumber;
+    //Connect to Micro:net - we need to tell it what channel we're using and also give it our message handler
     connectToMicroNet(channelNumber, messageHandler);
 </script>
 

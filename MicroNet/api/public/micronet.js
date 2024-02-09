@@ -1,3 +1,6 @@
+//Micro:Net API
+//You don't need to edit this file.
+
 const socketURL = 'ws://micronet.local/gateway';
 
 let socket;
