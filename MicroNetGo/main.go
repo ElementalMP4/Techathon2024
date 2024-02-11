@@ -39,7 +39,6 @@ func main() {
 		}
 		if len(ports) == 0 {
 			log.Println("No serial ports found!")
-			return
 		}
 
 		for _, port := range ports {
