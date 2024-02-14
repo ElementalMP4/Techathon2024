@@ -9,7 +9,8 @@ let ws;
 let serialPorts = new Map();
 
 function forwardMessage(data) {
-    sendDataToSerial(data.group, data.message);
+    console.log(`Forwarding to ${data.group}: ${data.message}`);
+    sendDataToSerial(data.group, `${data.message}\n`);
 }
 
 function createWebSocket() {

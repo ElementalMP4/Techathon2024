@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <script src="/micronet.js"></script>
+</head>
+
+<style>
+    h1,
+    h3,
+    p {
+        font-family: 'BBC Reith Sans', Courier, monospace
+    }
+
+    p {
+        color: black;
+        font-size: 30px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    body {
+        background-color: #111111;
+    }
+
+    .header {
+        background-color: red;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .log-message {
+        margin-top: 20px;
+        background: greenyellow;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    @keyframes pop-in {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .pop {
+        animation: pop-in 0.3s ease-out;
+    }
+</style>
+
+<body>
+    <div class="header">
+        <h1>Micro:Net Radio Reception Test</h1>
+        <title>Micro:Net Radio Reception Test</title>
+        <h3 id="channel-number"></h3>
+    </div>
+
+    <div id="message-log"></div>
+
+</body>
+
+<script>
+    let channelNumber = "10";
+    let messageLog = document.getElementById("message-log");
+    let channelNumberMessage = document.getElementById("channel-number");
+
+    let startTime;
+
+    function wrapMessageInDiv(message) {
+        return `
+        <div class="log-message pop" style="background: #${Math.floor(Math.random() * 16777215).toString(16)}">
+            <p>${message}</p>
+        </div>
+        `
+    }
+
+    function getTime() {
+        return new Date().getTime();
+    }
+
+    function ping() {
+        startTime = getTime();
+        sendToMicroNet("ping");
+    }
+
+    function messageHandler(message) {
+        if (message == "ack") {
+            let timeTakenMessage = `Ping took ${getTime() - startTime}ms`
+            let wrappedMessage = wrapMessageInDiv(timeTakenMessage);
+            messageLog.insertAdjacentHTML("afterbegin", wrappedMessage);
+            setTimeout(ping, 1000);
+        }
+    }
+
+    function startPing() {
+        ping();
+        setInterval(() => {
+            if (getTime() - startTime > 3000) {
+                console.log("Assuming ping missed, re-sending");
+                ping();
+            }
+        }, 100);
+    }
+
+    channelNumberMessage.innerHTML = "Channel number: " + channelNumber;
+    connectToMicroNet(channelNumber, messageHandler, startPing);
+</script>
+
+</html>

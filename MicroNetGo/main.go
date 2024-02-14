@@ -19,11 +19,15 @@ type PortData struct {
 var (
 	openedPorts  map[string]*serial.Port
 	portDataMap  map[string]*PortData
-	upgrader     = websocket.Upgrader{}
+	upgrader     = websocket.Upgrader{CheckOrigin: checkOrigin}
 	connections  = make(map[*websocket.Conn]struct{})
 	addClient    = make(chan *websocket.Conn)
 	removeClient = make(chan *websocket.Conn)
 )
+
+func checkOrigin(r *http.Request) bool {
+	return true
+}
 
 func main() {
 	openedPorts = make(map[string]*serial.Port)
@@ -69,10 +73,13 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("New WS connection: " + r.RemoteAddr)
+
 	connections[conn] = struct{}{}
 	addClient <- conn
 
 	defer func() {
+		log.Println("WS connection closed: " + r.RemoteAddr)
 		conn.Close()
 		removeClient <- conn
 	}()
@@ -122,8 +129,9 @@ func openPort(portName string) {
 
 		if idx := bytes.IndexByte(portData.Buffer, '\n'); idx != -1 {
 			line := portData.Buffer[:idx+1]
-			broadcastMessage(string(line))
-			log.Printf("Port %s: %s", portName, string(line))
+			content := string(line)
+			broadcastMessage(content)
+			log.Printf("%s: %s", portName, content)
 			portData.Buffer = portData.Buffer[idx+1:]
 		}
 	}

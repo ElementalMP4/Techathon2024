@@ -1,3 +1,2 @@
 go.sum
-micronet
-micronet.exe
+bin/*

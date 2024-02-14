@@ -5,6 +5,7 @@ const socketURL = 'ws://micronet.local/gateway';
 
 let socket;
 let msgHandler = null;
+let opnHandler = null;
 let groupId = 0;
 let identified = false;
 
@@ -25,7 +26,6 @@ function sendToMicroNet(message) {
     } else {
         log(LogLevel.ERROR, "MicroNet isn't connected!");
     }
-
 }
 
 function connectWebSocket() {
@@ -53,6 +53,7 @@ function connectWebSocket() {
                 break;
             case "identify":
                 identified = true;
+                opnHandler();
                 break;
         }
     };
@@ -67,8 +68,9 @@ function connectWebSocket() {
     };
 }
 
-function connectToMicroNet(id, handler) {
+function connectToMicroNet(id, messageHandler, openedHandler) {
     groupId = id;
-    msgHandler = handler;
+    msgHandler = messageHandler;
+    opnHandler = openedHandler;
     connectWebSocket();
 }

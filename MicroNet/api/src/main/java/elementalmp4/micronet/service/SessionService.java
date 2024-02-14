@@ -46,7 +46,7 @@ public class SessionService {
     }
 
     public void broadcastToBridge(Session session, JSONObject msg) {
-        Optional<Session> bridge = bridgeService.getSessionForChannel(session.getSessionType().get());
+        Optional<Session> bridge = bridgeService.getSessionForChannel(session.getSessionGroup().get());
         if (bridge.isPresent()) {
             bridge.get().send(msg);
         } else {
