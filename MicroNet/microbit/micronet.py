@@ -1,11 +1,23 @@
 from microbit import *
 import radio
-
-id = 10
+import music
 
 uart.init(115200)
+music.set_tempo(ticks=20)
+
+id = 10
 radio.config(group=id, power=7)
 radio.on()
+
+buf = bytearray()
+last_uart_read_time = 0
+uart_timeout = 100
+
+def power_on_tone():
+    music.play(['c', 'c'])
+
+def identified_tone():
+    music.play(['e', 'd', 'e'])
 
 def send_chunked(data):
     chunk_size = 10
@@ -13,20 +25,28 @@ def send_chunked(data):
         uart.write(data[i:i+chunk_size])
         sleep(20)
 
+power_on_tone()
+
 while True:
-    buf = uart.readline()
-    if buf:
-        buf = buf.decode().strip()
-        args = buf.split(' ')
+    if uart.any():
+        buf.extend(uart.read(1))
+        last_uart_read_time = running_time()
+    
+    if buf.decode().endswith('\r\n'):
+        content = str(buf, 'utf-8').strip()
+        args = content.split(' ')
         if args[0] == 'id':
             id = int(args[1])
             radio.config(group=id)
+            identified_tone()
         else:
-            radio.send(buf)
+            radio.send(content)
+        
+        buf = bytearray()
     
-    while uart.any():
-        uart.read(1)
-    
+    if running_time() - last_uart_read_time > uart_timeout:
+        buf = bytearray()
+
     received = radio.receive()
     if received:
         send_chunked(received + '\r\n')
@@ -36,3 +56,5 @@ while True:
     
     if button_b.was_pressed():
         display.scroll(str(id))
+
+    sleep(20)

@@ -1,7 +1,7 @@
 {
     "devices": [
         {
-            "port": "/dev/cu.usbmodem11402",
+            "port": "/dev/cu.usbmodem1102",
             "channel": "10"
         }
     ],

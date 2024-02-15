@@ -10,7 +10,7 @@ let serialPorts = new Map();
 
 function forwardMessage(data) {
     console.log(`Forwarding to ${data.group}: ${data.message}`);
-    sendDataToSerial(data.group, `${data.message}\n`);
+    sendDataToSerial(data.group, `${data.message}\r\n`);
 }
 
 function createWebSocket() {
@@ -53,7 +53,7 @@ function createSerialPort(device) {
 
     serialPort.on('open', () => {
         console.log('Opened serial for channel ' + device.channel);
-        sendDataToSerial(device.channel, `id ${device.channel}\n`);
+        sendDataToSerial(device.channel, `id ${device.channel}\r\n`);
     });
 
     serialParser.on('data', (data) => {
