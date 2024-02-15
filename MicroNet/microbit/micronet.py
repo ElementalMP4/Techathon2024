@@ -2,7 +2,7 @@ from microbit import *
 import radio
 import music
 
-uart.init(115200)
+uart.init(9600)
 music.set_tempo(ticks=20)
 
 id = 10
@@ -23,13 +23,13 @@ def send_chunked(data):
     chunk_size = 10
     for i in range(0, len(data), chunk_size):
         uart.write(data[i:i+chunk_size])
-        sleep(20)
+        sleep(5)
 
 power_on_tone()
 
 while True:
     if uart.any():
-        buf.extend(uart.read(1))
+        buf.extend(uart.read(128))
         last_uart_read_time = running_time()
     
     if buf.decode().endswith('\r\n'):

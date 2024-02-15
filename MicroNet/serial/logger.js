@@ -1,7 +1,7 @@
 const LogLevel = {
-    OK: "[  \x1b[1m\x1b[32mOK\x1b[0m  ]",
-    ERROR: "[ \x1b[1m\x1b[31mFAIL\x1b[0m ]",
-    INFO: "[ \x1b[1m\x1b[33mINFO\x1b[0m ]"
+    OK: "  \x1b[1m\x1b[32mOK\x1b[0m  ",
+    ERROR: " \x1b[1m\x1b[31mFAIL\x1b[0m ",
+    INFO: " \x1b[1m\x1b[33mINFO\x1b[0m "
 }
 
 function pad(n) {
