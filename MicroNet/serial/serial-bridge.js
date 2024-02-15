@@ -2,6 +2,7 @@ const config = require("./config.json");
 const WebSocket = require('ws');
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
+const { LogLevel, log } = require("./logger");
 
 const noSerial = config.noSerial || false;
 
@@ -9,7 +10,7 @@ let ws;
 let serialPorts = new Map();
 
 function forwardMessage(data) {
-    console.log(`Forwarding to ${data.group}: ${data.message}`);
+    log(LogLevel.INFO, `Forwarding to ${data.group}: ${data.message}`);
     sendDataToSerial(data.group, `${data.message}\r\n`);
 }
 
@@ -17,7 +18,7 @@ function createWebSocket() {
     ws = new WebSocket(config.websocket);
 
     ws.on('open', () => {
-        console.log('Connected to WebSocket server');
+        log(LogLevel.OK, 'Connected to WebSocket server');
         ws.send(JSON.stringify({ "type": "identify", "data": { nodeType: "bridge", channels: config.devices.map(d => d.channel) } }));
     });
 
@@ -25,7 +26,7 @@ function createWebSocket() {
         const msg = JSON.parse(data);
 
         if (!msg.success) {
-            console.log("Source: " + msg.type + " Error: " + msg.data.error);
+            log(LogLevel.ERROR, "Source: " + msg.type + " Error: " + msg.data.error);
             return;
         }
 
@@ -38,11 +39,11 @@ function createWebSocket() {
     });
 
     ws.on('error', (error) => {
-        console.error(`WebSocket error: ${error.message}`);
+        log(LogLevel.ERROR, `WebSocket error: ${error.message}`);
     });
 
     ws.on('close', (code, reason) => {
-        console.log(`WebSocket connection closed - Reconnecting in 3 seconds`);
+        log(LogLevel.ERROR, `WebSocket connection closed - Reconnecting in 3 seconds`);
         setTimeout(createWebSocket, 3000);
     });
 }
@@ -52,17 +53,17 @@ function createSerialPort(device) {
     let serialParser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
     serialPort.on('open', () => {
-        console.log('Opened serial for channel ' + device.channel);
+        log(LogLevel.OK, 'Opened serial for channel ' + device.channel);
         sendDataToSerial(device.channel, `id ${device.channel}\r\n`);
     });
 
     serialParser.on('data', (data) => {
-        console.log(`Received data from channel ${device.channel}: ${data}`);
+        log(LogLevel.INFO, `Received data from channel ${device.channel}: ${data}`);
         sendMessage({ type: "forward", data: { group: device.channel, message: data.trim() } });
     });
 
     serialPort.on('error', (err) => {
-        console.error(`Serial port error: ${err.message}`);
+        log(LogLevel.ERROR, `Serial port error: ${err.message}`);
         setTimeout(() => createSerialPort(device), 3000);
     });
 
@@ -74,7 +75,7 @@ function sendMessage(message) {
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message));
     } else {
-        console.warn('WebSocket not open. Message not sent.');
+        log(LogLevel.ERROR, 'WebSocket not open. Message not sent.');
     }
 }
 
@@ -83,11 +84,11 @@ function sendDataToSerial(channel, data) {
     if (serialPort && serialPort.isOpen) {
         serialPort.write(data, (err) => {
             if (err) {
-                console.error(`Error writing to ${channel}`, err.message);
+                log(LogLevel.ERROR, `Error writing to ${channel}`, err.message);
             }
         });
     } else {
-        if (config.logConnectionFaults) console.warn(`Channel ${channel} not open, cannot send data`);
+        if (config.logConnectionFaults) log(LogLevel.ERROR, `Channel ${channel} not open, cannot send data`);
     }
 }
 
