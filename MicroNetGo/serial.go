@@ -79,13 +79,12 @@ func openPort(portName string) {
 
 		portData := portDataMap[portName]
 		portData.Buffer = append(portData.Buffer, data...)
-
-		if idx := bytes.IndexByte(portData.Buffer, '\n'); idx != -1 {
-			line := portData.Buffer[:idx+1]
+		if idx := bytes.Index(portData.Buffer, []byte{'\r', '\n'}); idx != -1 {
+			line := bytes.TrimSpace(portData.Buffer[:idx])
 			content := string(line)
 			broadcastMessage(content)
 			log.Printf("%s: %s", portName, content)
-			portData.Buffer = portData.Buffer[idx+1:]
+			portData.Buffer = []byte{}
 		}
 	}
 }
