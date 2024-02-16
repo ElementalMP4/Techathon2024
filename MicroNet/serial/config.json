@@ -1,10 +1,10 @@
 {
     "devices": [
         {
-            "port": "/dev/cu.usbmodem1102",
+            "port": "/dev/cu.usbmodem21402",
             "channel": "10"
         }
     ],
-    "baudRate": 9600,
+    "baudRate": 115200,
     "websocket": "ws://localhost/gateway"
 }
