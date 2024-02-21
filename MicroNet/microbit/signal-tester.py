@@ -4,16 +4,16 @@ import radio
 power = 0
 display.show(power)
 
-radio.config(group=10, power=power)
+radio.config(group=19, power=power)
 radio.on()
 
 while True:
     received = radio.receive()
-    if received:
-        display.scroll(received)
+    if received is not None and received == 'ping':
+        radio.send('ack')
     
     if button_a.was_pressed():
-        radio.send("Radio Rocks!")
+        radio.send("Test Message")
         
     if button_b.was_pressed():
         power += 1

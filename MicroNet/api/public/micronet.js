@@ -53,7 +53,7 @@ function connectWebSocket() {
                 break;
             case "identify":
                 identified = true;
-                opnHandler();
+                if (typeof opnHandler == 'function') opnHandler();
                 break;
         }
     };
