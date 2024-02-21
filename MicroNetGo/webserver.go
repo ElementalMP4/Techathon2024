@@ -19,8 +19,12 @@ func checkOrigin(r *http.Request) bool {
 }
 
 func startWebSocketServer() {
-	http.HandleFunc("/", handleWebSocket)
-	log.Println("Starting WebSocket server on port 80")
+	fs := http.FileServer(http.Dir("./www"))
+
+	http.Handle("/", fs)
+	http.HandleFunc("/micronet", handleWebSocket)
+
+	log.Println("Starting server on port 80")
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatal("WebSocket server failed to start: ", err)
 	}
@@ -55,8 +59,6 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 func broadcastMessage(message string) {
 	for conn := range connections {
-		if err := conn.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
-			log.Println("Error broadcasting message to client:", err)
-		}
+		conn.WriteMessage(websocket.TextMessage, []byte(message))
 	}
 }
